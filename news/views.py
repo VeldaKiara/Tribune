@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http  import HttpResponse
+from django.http  import HttpResponse,Http404
 import datetime as dt
 #A view is a function that takes the request from a user,
 #  processes it and returns a response to the user
@@ -39,6 +39,26 @@ def news_of_day(request):
             </body>
         </html>
             '''
-    return HttpResponse(html)          
+    return HttpResponse(html)         
 
+#data gets 
+def past_days_news(request,past_date):
+        # Converts data from the string Url
+    try:
+        date = dt.datetime.strptime(past_date,'%Y-%m-%d').date()
+    except ValueError:
+        # Raise 404 error when ValueError is thrown
+        raise Http404()
+
+        day = convert_dates(date)
+        html = f'''
+        <html>
+            <body>
+                <h1>News for {day} {date.day}-{date.month}-{date.year}</h1>
+            </body>
+        </html>
+            '''
+        return HttpResponse(html) 
+     
+    
         
